@@ -1,1 +1,3 @@
-# Bangkit2023-Batch2-Capstone-WisataKu
+# Capstone-Bangkit2023-Batch2
+
+# Wisataku
