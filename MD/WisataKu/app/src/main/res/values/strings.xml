@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">WisataKu</string>
+
+    <string name="motto">Application to explore various
+vacation destinations in Indonesia</string>
+
+    <string name="title_login_page">Sign In</string>
+    <string name="title_register_page">Sign Up</string>
+
+    <string name="message_intro_page">Please fill the following data:</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <string name="register">SIGN UP</string>
+    <string name="login">SIGN IN</string>
+
+    <string name="logout">LOGOUT</string>
+</resources>
