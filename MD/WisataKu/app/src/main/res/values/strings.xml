@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">WisataKu</string>
 
+    <!--    sementara-->
+    <string name="detail">Detail</string>
+    <string name="title">Labuan Bajo</string>
+    <string name="location">East Nusa Tenggara</string>
+    <string name="rating">4.5/5</string>
+    <string name="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vehicula id augue sit amet bibendum. Pellentesque sit amet mollis ante, nec sagittis neque. Nam eget luctus nisi. Morbi vitae diam nec risus pretium rhoncus non vitae sapien. Phasellus auctor sed nisi et feugiat. Donec nulla nisi, tempus eget orci eget, efficitur commodo neque. Etiam sit amet neque eget turpis vestibulum fermentum sed vitae sem. Curabitur gravida ante eu lobortis feugiat. Sed fringilla lacus arcu, vitae efficitur tellus tincidunt sit amet. Aenean cursus quis nisi sit amet feugiat. Fusce eu magna scelerisque, tempus orci ut, eleifend purus. Nunc consectetur augue eget varius consectetur. Morbi non quam maximus, facilisis nisl eu, lobortis diam. Nulla ullamcorper ante massa, non viverra turpis fermentum eget.</string>
+    <string name="person">Person</string>
+
     <string name="motto">Application to explore various
 vacation destinations in Indonesia</string>
 
