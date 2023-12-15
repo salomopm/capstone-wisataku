@@ -7,7 +7,7 @@ const routes = [
 
     {
         method: 'POST',
-        path: '/users',
+        path: '/register',
         handler: addUsersHandler,
         options: {
             auth: false
@@ -16,7 +16,7 @@ const routes = [
 
     {
         method: 'POST',
-        path: '/users/auth',
+        path: '/login',
         handler: LoginUserHandler,
         options: {
             auth: false
