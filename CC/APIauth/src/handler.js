@@ -2,81 +2,131 @@ const bcrypt = require('bcrypt')
 const users = require('./users');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'CH2-PS432';
+const mysql = require('mysql');
 
+const connection = mysql.createConnection({
+  host: 'cloud sql ip',  // Use the Cloud SQL IP address or connection name
+  user: '',
+  password: '',
+  database: '',
+});
 
 const LoginUserHandler = async (request, h) => {
-    const {email, password} = request.payload;
-
-    var user = users.find(user => user.email === email)
-    if (user === false) {
-        return response.status(400).send('Cannot find user')
-    }else if(user != null){
-        try {
-            if (await bcrypt.compare(password, user.hashedPassword)) {
-              
-              const userPayload = {
-                email: user.email,
-                nama: user.nama,
-                role: user.role
+    const {email, password} = request.payload;  
+    const selectQuery = 'SELECT * FROM (table_name) WHERE email = ?';    
+    try {
+      const usersResult = await new Promise((resolve, reject) => {
+          connection.query(selectQuery, [email], (err, result) => {
+              if (err) {
+                  console.error('Error querying database:', err);
+                  reject(err);
+              } else {
+                  resolve(result);
               }
-              
+          });
+      });
 
-              const expiresIn = 60*60*1;
+      const user = usersResult[0]; // Assuming the email is unique
 
-              const token = jwt.sign(userPayload, JWT_SECRET, {expiresIn: expiresIn})
-              const decodedToken = jwt.verify(token, JWT_SECRET);
-              console.log(decodedToken);
-              const response = h.response({
-                status: 'Success',
-                message: 'Berhasil Authentikasi & Authorization',
-                token: token
-              });
-              response.code(201);
-              return response;
-            } else {
-              const response = h.response({
-                status: 'Failed',
-                message: 'Gagal Authentikasi & Authorization',
-              });
-              response.code(400);
-              return response;
-            }
-          } catch (error) {
-            console.error(error); // Log the error to the console
-            response.status(500).send('Internal Server Error'); // Provide a more specific error message
-          }
-    }
-    const response = h.response({
-        status: 'Failed',
-        message: 'Gagal menemukan user. Mohon isi data dengan benar',
-        });
-        response.code(400);
-        return response;
+      if (!user) {
+          const response = h.response({
+              status: 'Failed',
+              message: 'User not found. Please check your credentials.',
+          });
+          response.code(400);
+          return response;
+      }
+
+      if (await bcrypt.compare(password, user.hashedPassword)) {
+          const userPayload = {
+              email: user.email,
+              nama: user.name,
+              role: user.role,
+          };
+
+          const expiresIn = 60 * 60 * 1;
+
+          const token = jwt.sign(userPayload, JWT_SECRET, { expiresIn });
+          const decodedToken = jwt.verify(token, JWT_SECRET);
+          console.log(decodedToken);
+
+          const response = h.response({
+              status: 'Success',
+              message: 'Authentication and Authorization successful',
+              token: token,
+          });
+          response.code(201);
+          return response;
+      } else {
+          const response = h.response({
+              status: 'Failed',
+              message: 'Authentication and Authorization failed',
+          });
+          response.code(400);
+          return response;
+      }
+  } catch (error) {
+      console.error(error); // Log the error to the console
+      const response = h.response({
+          status: 'Failed',
+          message: 'Internal Server Error',
+      });
+      response.code(500);
+      return response;
+  }
 
 };
 
 const addUsersHandler = async (request, h) => {
-    const {nama, email, password} = request.payload;
-    
+  
+    const {name, email, password} = request.payload;
+
     const hashedPassword = await bcrypt.hash(password, 10)
+    const newUsers = {name, email, hashedPassword, role: "user"}
+    
+    const checkEmailQuery = 'SELECT COUNT(*) as count FROM (table_name) WHERE email = ?';
+    const checkEmailValues = [newUsers.email];
 
-
-    const newUsers = {nama, email, hashedPassword, role: "user"}
-    var user = users.findIndex(user => user.nama === nama)
-    if (user !== -1) {
-      const response = h.response({
-        status: 'fail',
-        message: 'Nama telah diambil'
+    const emailCheckResult = await new Promise((resolve, reject) => {
+      connection.query(checkEmailQuery, checkEmailValues, (err, result) => {
+          if (err) {
+              console.error('Error checking email:', err);
+              reject(err);
+          } else {
+              resolve(result);
+          }
       });
-      response.code(400);
-      return response;
-    }else if (newUsers.nama != null && newUsers.email != null && newUsers.hashedPassword != null) {
+    });
+
+    const emailExists = emailCheckResult[0].count > 0;
+
+    if (emailExists) {
+        const response = h.response({
+            status: 'fail',
+            message: 'Email is already taken',
+        });
+        response.code(400);
+        return response;
+    }
+    
+    const insertQuery = 'INSERT INTO (table_name) (name, email, hashedPassword, role) VALUES (?, ?, ?, ?)';
+    
+    if (newUsers.name != null && newUsers.email != null && newUsers.hashedPassword != null) {
       const response = h.response({
         status: 'success',
         message: 'User berhasil ditambahkan',
       });
       response.code(201);
-      users.push(newUsers);
+
+      connection.query(insertQuery, [newUsers.name, newUsers.email, newUsers.hashedPassword, newUsers.role], (err, result) => {
+        if (err) {
+          console.error('Error registering user:', err);
+          return reject(err);
+        }
+
+        console.log('User registered successfully');
+      });
+
       return response;
   }
 
@@ -98,10 +148,10 @@ const getAllUsersHandler = (request, h) => {
   const { payload } = decodedToken;
   
 
-  if (payload.role && payload.role == 'user') {
+  if (payload.role && payload.role == 'admin') {
     const filteredUsers = users.map((user) => ({
       email: user.email,
-      nama: user.nama,
+      nama: user.name,
       password: user.hashedPassword,
       role: user.role
     }));
