@@ -75,7 +75,7 @@ WisataKu is a machine learning based mobile application that is intended to be a
 ## Infrastructure Design
 
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://media.discordapp.net/attachments/1187547700158271569/1187672652517740604/image.png?ex=6597bd5a&is=6585485a&hm=d5a7b799af600ea4ca74808401d4873bbf09084a4aae6bf968c12f4f4b11bb27&=&format=webp&quality=lossless&width=1240&height=614)
 
 
 ## Mobile Development Documentation
