@@ -87,24 +87,20 @@ WisataKu is a machine learning based mobile application that is intended to be a
 ## Machine Learning Model Installation
 
 
-## Machine Learning Install Requirements
+### Machine Learning Install Requirements
 The following are the resources used in creating the model:
 - [Requirements.txt](https://github.com/salomopm/capstone-wisataku/blob/main/ML/Requirements.txt)
 
 
-## Dataset
+### Dataset
 We have 3 datasets for model building 
 (Tourism With Id, Tourism Rating, User)
 - [Dataset](https://github.com/salomopm/capstone-wisataku/tree/main/ML/Dataset)
 
-## Model
+### Model
 - [Model Rekomendasi](https://github.com/salomopm/capstone-wisataku/tree/main/ML/my_model.pkl)
 - [Model Popular / Rangking](https://github.com/salomopm/capstone-wisataku/blob/main/ML/Flask/popular.h5)
 
-## Documentation
-
-
-[Documentation](https://linktodocumentation)
 
 
 ## Cloud Computing Back-End Installation
