@@ -5,9 +5,3 @@ data class UserModel(
     val token: String,
     val isLogin: Boolean = false
 )
-
-//data class User(
-//    val name: String,
-//    val email: String,
-//    val password: String
-//)
