@@ -4,17 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.wisataku.data.pref.UserModel
-import com.example.wisataku.data.repository.UserRepository
+import com.example.wisataku.data.model.UserModel
+import com.example.wisataku.data.UserRepository
 import kotlinx.coroutines.launch
 
-class MainViewModel(
-    private val userRepository: UserRepository,
-) : ViewModel() {
+class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    companion object {
-        private const val TAG = "SigninViewModel"
+    fun login(email: String, password: String) = userRepository.login(email, password)
+    fun register(nama: String, email: String, password: String) = userRepository.register(nama, email, password)
 
+    fun saveSession(user: UserModel) {
+        viewModelScope.launch {
+            userRepository.saveSession(user)
+        }
     }
 
     fun getSession(): LiveData<UserModel> {
